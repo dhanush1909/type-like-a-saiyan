@@ -2,4 +2,5 @@
 
 the struggle you are in today is developing the strength you need for tomorrow 
 
-![alt text](src/assets/logo.png)
+
+<img src="src/assets/logo.png" alt="logo" width="150"/>
