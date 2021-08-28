@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <router-link to="/"><i class="el-icon-s-home nav-icon"></i></router-link>
-    <router-link to="/type"
+    <router-link to="/typing-test"
       ><i class="el-icon-monitor nav-icon"></i
     ></router-link>
   </div>

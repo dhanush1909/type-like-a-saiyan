@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-import Type from "../views/Type.vue";
+import Type from "../views/TypeTest.vue";
 
 Vue.use(VueRouter);
 
@@ -12,8 +12,8 @@ const routes = [
     component: Home,
   },
   {
-    path: "/type",
-    name: "Type",
+    path: "/typing-test",
+    name: "Typing test",
     component: Type,
   },
   // {
