@@ -116,13 +116,12 @@ export default {
 .type-test-container {
   width: 100%;
   text-align: center;
+  display: grid;
 
   .words-container {
-    position: absolute;
-    top: 20%;
     margin: 0 10%;
     font-family: "Roboto", sans-serif;
-    font-size: 1.5vw;
+    font-size: 1.8vw;
     color: #eeeeee;
     letter-spacing: 1.2pt;
 

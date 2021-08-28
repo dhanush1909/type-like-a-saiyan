@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
+    <div class="logo-container">
+      <img alt="Vue logo" src="../assets/logo.png" />
+    </div>
   </div>
 </template>
 
@@ -16,6 +18,14 @@ export default {
   height: 80vh;
   justify-content: center;
   align-items: center;
+
+  .logo-container {
+    height: 50%;
+
+    img {
+      height: 100%;
+    }
+  }
 }
 </style>
 >
