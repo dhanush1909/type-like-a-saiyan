@@ -2,9 +2,9 @@ import randomWords from "random-words";
 import Word from "@/models/Word";
 import Letter from "@/models/Letter";
 
-export const getWords = () => {
+export const getWords = (numOfWords) => {
   const words = randomWords({
-    exactly: 10,
+    exactly: numOfWords,
     formatter: (word) => word.toLowerCase(),
   });
   return words.map((word) => {

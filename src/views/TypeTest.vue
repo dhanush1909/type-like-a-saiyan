@@ -1,59 +1,39 @@
 <template>
   <div class="type-test-container">
-    <el-row class="words-container">
-      <el-col
-        class="words has-error"
-        v-for="(word, index) in words"
-        :key="`word-${index}`"
-        :ref="`word-ref`"
-        ><div
-          class="chars"
-          :class="[
-            {
-              chars: true,
-              wrong: char.hasError,
-              correct: word.currentLetter > charIndex && !char.hasError,
-            },
-          ]"
-          v-for="(char, charIndex) in word.letters"
-          :key="`char-${charIndex}`"
-          :ref="`char-ref-${index}`"
-        >
-          {{ char.character }}
-        </div></el-col
-      >
-    </el-row>
+    <WordContainer ref="word-container" :words="words" />
     <div v-if="!testStart">Start Typing</div>
-    <el-dialog :visible.sync="showResult">
-      {{ getTestResults }}
-    </el-dialog>
+    <TestResult 
+      :visible="showResult" 
+      :test-start="testStart" 
+      :test-end="testEnd" 
+      :words="words" 
+      @restart-test="restartTest"
+    />
   </div>
 </template>
 
 <script>
 import { getWords } from "@/util/wordUtil";
+import WordContainer from '../components/typingTest/WordContainer.vue';
+import TestResult from '../components/typingTest/TestResult.vue';
+import Letter from '../models/Letter';
+
+const numOfWords = 5;
 
 export default {
   name: "TypeTest",
+  components: {
+    WordContainer,
+    TestResult,
+  },
   data() {
     return {
       words: [],
       activeWord: 0,
       testStart: null,
       testEnd: null,
-      speed: null,
       showResult: false,
     };
-  },
-  computed: {
-    getTestResults() {
-      let timeTakenInMills = this.testEnd - this.testStart;
-      let timeTakenInMins = timeTakenInMills / 1000 / 60;
-      let correctWordcount = this.words.reduce((accumulator, currentValue) => {
-        return accumulator + (currentValue.hasError ? 0 : 1);
-      }, 0);
-      return Math.floor(correctWordcount / timeTakenInMins);
-    },
   },
   created() {
     this.startTest();
@@ -63,14 +43,25 @@ export default {
   },
   methods: {
     startTest() {
-      this.testEnd = null;
-      this.words = getWords();
+      this.words = getWords(numOfWords);
       this.$nextTick(() => {
-        let firstWord = this.$refs["word-ref"][this.activeWord].$el;
-        firstWord.classList.add("active");
+        this.$refs["word-container"].setActiveWord(this.activeWord)
       });
 
       document.addEventListener("keydown", this.keyPressed);
+    },
+    restartTest() {
+      this.showResult = false;
+      this.testEnd = null;
+      this.testStart = null;
+      this.activeWord = 0;
+      this.removeActiveWords();
+      this.startTest();
+    },
+    removeActiveWords() {
+      for(let i=0;i<this.words.length;i++) {
+        this.$refs["word-container"].removeActiveWord(i);
+      }
     },
     checkForError() {
       let activeWord = this.words[this.activeWord];
@@ -88,23 +79,7 @@ export default {
       }
 
       let activeWord = this.words[this.activeWord];
-
       let pressedKey = event.key;
-
-      if (activeWord.currentLetter > activeWord.letters.length) {
-        return;
-      }
-
-      if (pressedKey === " ") {
-        this.checkForError();
-        let activeWord = this.$refs["word-ref"][this.activeWord].$el;
-        activeWord.classList.remove("active");
-        this.activeWord++;
-        let nextWord = this.$refs["word-ref"][this.activeWord].$el;
-        nextWord.classList.add("active");
-
-        return;
-      }
 
       if (pressedKey === "Backspace") {
         if (activeWord.currentLetter != 0) {
@@ -112,31 +87,56 @@ export default {
         }
 
         let previousChar = activeWord.letters[activeWord.currentLetter];
+        if(previousChar.isAdditional) {
+          activeWord.letters.pop();
+        }
         previousChar.isTyped = false;
         previousChar.hasError = false;
+        return;
+      } 
+
+      if (pressedKey === " " && this.activeWord !== numOfWords - 1) {
+        this.checkForError();
+        this.$refs["word-container"].removeActiveWord(this.activeWord)
+        this.activeWord++;
+        this.$refs["word-container"].setActiveWord(this.activeWord)
+        return;
+      }
+
+      if (activeWord.currentLetter === activeWord.letters.length) {
+        let letter = new Letter();
+        letter.character = pressedKey;
+        letter.isAdditional = true;
+        letter.hasError = true;
+        this.words[this.activeWord].letters.push(letter);
+        activeWord.currentLetter++;
         return;
       }
 
       let activeChar = activeWord.letters[activeWord.currentLetter];
-      if (activeChar.character === pressedKey) {
-        activeChar.isTyped = true;
-      } else {
+      activeChar.isTyped = true;
+      if (activeChar.character !== pressedKey) {
         activeChar.isTyped = true;
         activeChar.hasError = true;
+        activeChar.hadError = true;
       }
 
       activeWord.currentLetter++;
 
       if (
-        this.activeWord === 9 &&
+        this.activeWord === numOfWords - 1 &&
         (pressedKey === " " ||
           activeWord.currentLetter === activeWord.letters.length)
       ) {
-        this.testEnd = new Date();
-        this.showResult = true;
-        document.removeEventListener("keydown", this.keyPressed);
+        this.checkForError();
+        this.endTest();
       }
     },
+    endTest() {
+      this.testEnd = new Date();
+      this.showResult = true;
+      document.removeEventListener("keydown", this.keyPressed);
+    }
   },
 };
 </script>
@@ -148,41 +148,6 @@ export default {
   width: 100%;
   text-align: center;
   display: grid;
-
-  .words-container {
-    margin: 0 10%;
-    font-family: "Roboto", sans-serif;
-    font-size: 1.8vw;
-    color: #eeeeee;
-    letter-spacing: 1.2pt;
-
-    .words {
-      width: auto;
-      margin: 5px;
-      padding: 10px;
-      height: auto;
-      box-sizing: border-box;
-      border-radius: 20px;
-
-      &.active {
-        background-color: #1b1a17;
-      }
-    }
-
-    .chars {
-      opacity: 50%;
-      display: inline-block;
-
-      &.correct {
-        color: #f6c90e;
-        opacity: 100% !important;
-      }
-
-      &.wrong {
-        color: #ff8303;
-        opacity: 100% !important;
-      }
-    }
-  }
 }
+
 </style>

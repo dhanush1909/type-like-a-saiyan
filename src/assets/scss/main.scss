@@ -1,0 +1,21 @@
+body {
+    background-color: #303841;
+    color: #eeeeee;
+}
+
+.el-dialog {
+    background-color: #4A403A !important;
+    width: 70vw;
+
+    .el-dialog__header {
+        .el-dialog__title{
+            font-size: 30px;
+            color: #fff;
+        }
+    }
+
+    .el-dialog__body {
+        color: #fff;
+        padding: 20px;
+    }
+}

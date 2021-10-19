@@ -17,8 +17,5 @@ export default {
 </script>
 
 <style lang="scss">
-body {
-  background-color: #303841;
-  color: #eeeeee;
-}
+@import '@/assets/scss/main.scss';
 </style>
