@@ -7,18 +7,18 @@
             <div><div>RAW WPM</div>{{ getRawWpm }}</div>
             <div><div>ACCURACY</div>{{ getAccuracy+'%' }}</div>
         </div>
-        <div 
-            @click="restartTest" 
-            class="restart-button"
-        >
-            <i class="el-icon-refresh-right"></i>
-        </div>
+        <RestartButton @click="restartTest" />
     </el-dialog>
 </template>
 
 <script>
+import RestartButton from '../buttons/RestartButton.vue';
+
 export default {
     name: 'TestResult',
+    components: {
+        RestartButton,
+    },
     props: {
         visible: {
             type: Boolean,
@@ -39,33 +39,58 @@ export default {
     },
     computed: {
         getWpm() {
-            let timeTakenInMills = this.testEnd - this.testStart;
-            let timeTakenInMins = timeTakenInMills / 1000 / 60;
-            let correctWordcount = this.words.reduce((accumulator, currentValue) => {
-                return accumulator + (currentValue.hasError ? 0 : 1);
-            }, 0);
-            return Math.floor(correctWordcount / timeTakenInMins);
+            return Math.floor(this.numOfCorrectChars / 5 / this.timeTakenInMins);
         },
         getCpm() {
-            let timeTakenInMills = this.testEnd - this.testStart;
-            let timeTakenInMins = timeTakenInMills / 1000 / 60;
-            let charAuditObj = this.words.reduce((accumulator, currentValue) => {
-                return accumulator + (currentValue.hasError ? 0 : 1);
-            }, 0);
-            return Math.floor(charAuditObj * 6 / timeTakenInMins);
+            return Math.floor(this.numOfChars / this.timeTakenInMins);
         },
         getRawWpm() {
-            let timeTakenInMills = this.testEnd - this.testStart;
-            let timeTakenInMins = timeTakenInMills / 1000 / 60;
-            let wordCount = this.words.length;
-            return Math.floor(wordCount / timeTakenInMins);
+            return Math.floor(this.numOfChars / 5 / this.timeTakenInMins);
         },
         getAccuracy() {
-            let wordCount = this.words.length;
-            let correctWordcount = this.words.reduce((accumulator, currentValue) => {
-                return accumulator + (currentValue.hasError ? 0 : 1);
-            }, 0);
-            return Math.round(correctWordcount / wordCount * 100);
+            return Math.round(this.numOfCorrectCharsWithoutHistoyError / this.numOfChars * 100);
+        },
+        numOfChars() {
+           return this.words.reduce((accumulator, word) => {
+            return accumulator + word.letters.length;
+           }, 0) 
+        },
+        numOfCorrectChars() {
+           return this.words.reduce((accumulator, word) => {
+               let correctChars = 0;
+               for(let i=0;i<word.letters.length;i++) {
+                   if(!(word.letters[i].hasError || !word.letters[i].isTyped || word.letters[i].isAditional)) {
+                       correctChars++;
+                   }
+               }
+               return accumulator + correctChars;
+           }, 0);
+        },
+        numOfTypedChars() {
+           return this.words.reduce((accumulator, word) => {
+               let typedChars = 0;
+               for(let i=0;i<word.letters.length;i++) {
+                   if(word.letters[i].isTyped) {
+                       typedChars++;
+                   }
+               }
+               return accumulator + typedChars;
+           }, 0);
+        },
+        numOfCorrectCharsWithoutHistoyError() {
+           return this.words.reduce((accumulator, word) => {
+               let correctChars = 0;
+               for(let i=0;i<word.letters.length;i++) {
+                   if(!(word.letters[i].hasError || word.letters[i].hadError || !word.letters[i].isTyped || word.letters[i].isAditional)) {
+                       correctChars++;
+                   }
+               }
+               return accumulator + correctChars;
+           }, 0);
+        },
+        timeTakenInMins() {
+            let timeTakenInMills = this.testEnd - this.testStart;
+            return timeTakenInMills / 1000 / 60;
         }
     },
     methods: {
@@ -77,15 +102,6 @@ export default {
 </script>
 
 <style lang="scss">
-.restart-button i {
-    font-size: 30px;
-    padding: 15px 20px;
-    border-radius: 10px;
-    background-color: rgb(22, 58, 58);
-    margin-top: 60px;
-    cursor: pointer;
-}
-
 .result-container {
     display: flex;
     justify-content: space-around;

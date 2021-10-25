@@ -7,6 +7,7 @@ export const getWords = (numOfWords) => {
     exactly: numOfWords,
     formatter: (word) => word.toLowerCase(),
   });
+
   return words.map((word) => {
     let letters = [];
     for (let i = 0; i < word.length; i++) {
