@@ -1,11 +1,13 @@
 <template>
   <div class="header">
     <div class="left">
-      <img src="@/assets/keyboard-logo.svg" alt="log" />
-      <router-link to="/"><i class="el-icon-s-home nav-icon"></i></router-link>
-      <router-link to="/typing-test"
-        ><i class="el-icon-monitor nav-icon"></i
-      ></router-link>
+      <img src="@/assets/keyboard-logo.svg" alt="logo" />
+      <router-link to="/">
+        <font-awesome-icon icon="home" class="nav-icon" />
+      </router-link>
+      <router-link to="/typing-test">
+        <font-awesome-icon icon="keyboard" class="nav-icon" />
+      </router-link>
     </div>
     <TypingTestSettings class="settings"/>
   </div>
@@ -42,7 +44,7 @@ export default {
   }
 
   a {
-    color: rgba(255,255,255,0.7);;
+    color: rgba(255,255,255,0.7);
     margin: 0 10px;
 
     .nav-icon {
@@ -50,7 +52,7 @@ export default {
     }
   }
 
-  .nav-icon:hover {
+  .nav-icon:hover, .router-link-exact-active {
     color: #f6c90e !important;
   }
 }

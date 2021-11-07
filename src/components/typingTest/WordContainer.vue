@@ -54,7 +54,7 @@ export default {
           let wordContainer = document.getElementsByClassName('words-container')[0];
           let wordHeight = wordContainer.children[this.activeWordIndex].clientHeight;
           wordContainer.scrollBy({
-            top: wordHeight + (wordHeight / 5),
+            top: wordHeight + (wordHeight / 6),
             behavior: 'smooth'
           });
         },
@@ -81,7 +81,6 @@ export default {
 
 .type-test-container {
   .words-container {
-    margin: 5%;
     font-family: "Roboto", sans-serif;
     font-size: 1.8vw;
     color: #eeeeee;

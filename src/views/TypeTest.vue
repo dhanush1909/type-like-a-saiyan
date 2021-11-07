@@ -1,10 +1,18 @@
 <template>
   <div class="type-test-container">
-    <WordContainer 
-      ref="word-container" 
-      :words="words" 
-      :activeWordIndex="activeWord"
-    />
+    <div :style="'margin: 5%'">
+      <TestStats 
+        v-show="testStart !== null"
+        :current-word="activeWord" 
+        :total-words="words.length"
+        :test-type="testType"
+      />
+      <WordContainer 
+        ref="word-container" 
+        :words="words" 
+        :activeWordIndex="activeWord"
+      />
+    </div>
     <div v-if="!testStart">Start Typing</div>
     <RestartButton @click="restartTest" />
     <TestResult 
@@ -22,6 +30,7 @@ import { getWords } from "@/util/wordUtil";
 import WordContainer from '../components/typingTest/WordContainer.vue';
 import RestartButton from '@/components/buttons/RestartButton'
 import TestResult from '../components/typingTest/TestResult.vue';
+import TestStats from '@/components/typingTest/TestStats'
 import Letter from '../models/Letter';
 import { mapGetters } from 'vuex';
 
@@ -31,6 +40,7 @@ export default {
     WordContainer,
     TestResult,
     RestartButton,
+    TestStats,
   },
   data() {
     return {
@@ -45,7 +55,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('typingTest', ['numberOfWords']),
+    ...mapGetters('typingTest', ['numberOfWords', 'testType']),
   },
   watch: {
     numberOfWords() {
@@ -178,6 +188,7 @@ export default {
           activeWord.currentLetter === activeWord.letters.length)
       ) {
         this.checkForError();
+        this.activeWord++;
         this.endTest();
       }
     },

@@ -1,11 +1,41 @@
 <template>
     <div class="typing-test-setting">
-        <div class="title">Number of words</div>
-        <div class="options" ref="options">
-            <span>10</span>
-            <span>20</span>
-            <span>30</span>
-            <span>50</span>
+        <div class="options" ref="typeOptions">
+            <div 
+                class="title" 
+                :class="{'title':true, 'active':(testType === 'Word')}"
+                @click="onTestTypeChange"
+            >
+                Words
+            </div>
+            <div 
+                v-if="false"
+                class="title" 
+                :class="{'title':true, 'active':(testType === 'Time')}"
+                @click="onTestTypeChange"
+            >
+                Time
+            </div>
+        </div>
+        <div class="options" ref="numberWordsOptions" v-if="testType === 'Word'">
+            <span 
+                v-for="option in wordOptions" 
+                :key="`word-${option}`"
+                :class="{'active':(numberOfWords === option)}"
+                @click="onNumOfWordsChange"
+            >
+                {{ option }}
+            </span>
+        </div>
+        <div class="options" ref="timeOptions" v-else-if="testType === 'Time'">
+            <span 
+                v-for="option in timeOptions" 
+                :key="`time-${option}`"
+                :class="{'active':(testTime === option)}"
+                @click="onTimeChange"
+            >
+                {{ option }}
+            </span>
         </div>
     </div>
 </template>
@@ -13,26 +43,21 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 
-export default {
-    computed: {
-        ...mapGetters('typingTest', ['numberOfWords']),
-    },
-    watch: {
-        numberOfWords() {
-            this.setActiveWordColor();
-        },
-    },
-    mounted() {
-        let optionsRef = this.$refs.options;
-        let options = optionsRef.children;
-        options.forEach(option => {
-            option.addEventListener("click", this.onNumOfWordsChange);
-        });
+const WORD_OPTIONS = [10,20,30,50];
+const TIME_OPTIONS = [15,30,60];
 
-        this.setActiveWordColor();
+export default {
+    data() {
+        return {
+            wordOptions: [...WORD_OPTIONS],
+            timeOptions: [...TIME_OPTIONS],
+        }
+    },
+    computed: {
+        ...mapGetters('typingTest', ['numberOfWords', 'testType', 'testTime']),
     },
     methods: {
-        ...mapActions('typingTest', ['changeNumOfWords']),
+        ...mapActions('typingTest', ['changeNumOfWords', 'changeTestType', 'changeTestTime']),
 
         onNumOfWordsChange(event) {
             let option = event.srcElement.innerHTML;
@@ -40,26 +65,34 @@ export default {
                 return;
             }
 
-            this.changeNumOfWords(option);
+            this.changeNumOfWords(option.trim());
         },
 
-        setActiveWordColor() {
-            let optionsRef = this.$refs.options;
-            let options = optionsRef.children;
-            options.forEach(option => {
-                if(option.innerHTML == this.numberOfWords) {
-                    option.classList.add('active');
-                } else {
-                    option.classList.remove('active');
-                }
-            })
-        }
-    }
+        onTimeChange(event) {
+            let option = event.srcElement.innerHTML;
+            if(this.testTime == option) {
+                return;
+            }
+
+            this.changeTestTime(option.trim());
+        },
+
+        onTestTypeChange(event) {
+            let option = event.srcElement.innerHTML;
+            if(this.testType == option) {
+                return;
+            }
+
+            this.changeTestType(option.trim());
+        },
+    },
 }
 </script>
 
 <style lang="scss" scoped>
 .typing-test-setting {
+    width: 10%;
+
     .title {
         font-size: 14px;
     }
