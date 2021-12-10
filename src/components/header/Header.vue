@@ -8,6 +8,14 @@
       <router-link to="/typing-test">
         <font-awesome-icon icon="keyboard" class="nav-icon" />
       </router-link>
+      <el-switch
+        style="margin: 0 30px"
+        v-model="theme"
+        active-text="Light"
+        inactive-text="Dark"
+        @change="switchTheme"
+      >
+      </el-switch>
     </div>
     <TypingTestSettings class="settings"/>
   </div>
@@ -20,6 +28,20 @@ export default {
   name: "Header",
   components: {
     TypingTestSettings,
+  },
+  data() {
+    return {
+      theme: this.$theme.currentTheme === 'light',
+    }
+  },
+  methods: {
+    switchTheme(value) {
+      if(value === true) {
+        this.$theme.setTheme('light');
+      } else {
+        this.$theme.setTheme('gotham');
+      }
+    }
   }
 };
 </script>
@@ -32,6 +54,7 @@ export default {
   padding: 10px 10px;
   display: flex;
   justify-content: space-between;
+  color: var(--color-primary);
   
   .left {
     align-items: center;
@@ -44,7 +67,7 @@ export default {
   }
 
   a {
-    color: rgba(255,255,255,0.7);
+    color: var(--color-primary);
     margin: 0 10px;
 
     .nav-icon {
@@ -53,7 +76,7 @@ export default {
   }
 
   .nav-icon:hover, .router-link-exact-active {
-    color: #f6c90e !important;
+    color: var(--color-secondary) !important;
   }
 }
 </style>

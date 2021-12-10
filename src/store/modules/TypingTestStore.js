@@ -1,6 +1,6 @@
 const getState = () => ({
     test: {
-        type: 'Word',
+        type: 'Words',
         numberOfWords: 10,
         time: 15,
     },
@@ -19,7 +19,7 @@ const getActions = () => ({
 
     changeTestType({ commit }, type) {
         commit('setTestType', type);
-        if (type === 'Word') {
+        if (type === 'Words') {
             commit('setNumOfWords', 10);
         } else {
             commit('setTestTime', 15);

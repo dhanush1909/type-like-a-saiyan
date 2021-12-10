@@ -1,0 +1,39 @@
+$gotham: (
+    'background-color': #303841,
+    'color-primary': rgba(255,255,255,0.6),
+    'color-secondary': #f6c90e,
+    'dialog-background-color': #4A403A,
+    'dialog-color': #fff,
+    'restart-button-background-color': rgb(22, 58, 58),
+    'restart-button-background-color-hover': rgb(22, 58, 58, 0.5),
+    'typing-test-color': #eeeeee,
+    'typing-test-wrong': #ff4800,
+    'typing-test-correct': #f6c90e,
+);
+
+$light: (
+    'background-color': #e4ecf5,
+    'color-primary': rgba(48, 4, 4, 0.753),
+    'color-secondary': #f6c90e,
+    'dialog-background-color': #a8998f,
+    'dialog-color': rgb(0, 22, 54),
+    'restart-button-background-color': rgb(4, 32, 32),
+    'restart-button-background-color-hover': rgb(4, 32, 32, 0.5),
+    'typing-test-color': rgb(16, 0, 37),
+    'typing-test-wrong': #ff4800,
+    'typing-test-correct': #f6c90e,
+);
+
+.gotham {
+    // define a css variable for each theme color
+    @each $name, $color in $gotham {
+      --#{$name}: #{$color};
+    }
+}
+
+.light {
+    // define a css variable for each theme color
+    @each $name, $color in $light {
+      --#{$name}: #{$color};
+    }
+}

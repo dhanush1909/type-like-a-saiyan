@@ -3,13 +3,12 @@
         <div class="options" ref="typeOptions">
             <div 
                 class="title" 
-                :class="{'title':true, 'active':(testType === 'Word')}"
+                :class="{'title':true, 'active':(testType === 'Words')}"
                 @click="onTestTypeChange"
             >
                 Words
             </div>
             <div 
-                v-if="false"
                 class="title" 
                 :class="{'title':true, 'active':(testType === 'Time')}"
                 @click="onTestTypeChange"
@@ -17,7 +16,7 @@
                 Time
             </div>
         </div>
-        <div class="options" ref="numberWordsOptions" v-if="testType === 'Word'">
+        <div class="options" ref="numberWordsOptions" v-if="testType === 'Words'">
             <span 
                 v-for="option in wordOptions" 
                 :key="`word-${option}`"

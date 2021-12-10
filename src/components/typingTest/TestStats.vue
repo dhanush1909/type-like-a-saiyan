@@ -1,7 +1,7 @@
 <template>
     <div class="test-stats">
-        <div v-if="testType === 'Word'">{{ currentWord + '/' + totalWords }}</div>
-        <div v-if="testType === 'Time'">Time</div>
+        <div v-if="testType === 'Words'">{{ currentWord + '/' + totalWords }}</div>
+        <div v-if="testType === 'Time'">{{ this.timeRemaining }}</div>
         <div>{{ testType }}</div>
     </div>
 </template>
@@ -20,6 +20,10 @@ export default {
         totalWords: {
             type: Number,
             required: true,
+        },
+        timeRemaining: {
+            type: Number,
+            required: true,
         }
     },
 }
@@ -35,6 +39,12 @@ export default {
         font-size: 1.4vw;
         padding: 0 15px;
         letter-spacing: 1.5pt;
+    }
+}
+
+.light {
+    .test-stats {
+        color: var(--color-primary)
     }
 }
 </style>

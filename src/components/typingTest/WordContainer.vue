@@ -90,7 +90,7 @@ export default {
   .words-container {
     font-family: "Roboto", sans-serif;
     font-size: 1.8vw;
-    color: #eeeeee;
+    color: var(--typing-test-color);
     letter-spacing: 1.5pt;
     height: 30vh;
     overflow: scroll;
@@ -117,13 +117,13 @@ export default {
       display: inline-block;
 
       &.correct {
-        color: #f6c90e;
+        color: var(--typing-test-correct);
         opacity: 1 !important;
       }
 
       &.wrong,
       &.additional {
-        color: #ff4800;
+        color: var(--typing-test-wrong);
         opacity: 1 !important;
       }
 

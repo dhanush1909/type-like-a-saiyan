@@ -6,6 +6,7 @@
         :current-word="activeWord" 
         :total-words="words.length"
         :test-type="testType"
+        :timeRemaining="timeRemaining"
       />
       <WordContainer 
         ref="word-container" 
@@ -52,14 +53,27 @@ export default {
       wordContainerWidth: 0,
       currentLine: 1,
       currentLineWidth: 0,
+      timeCounterInterval: null,
+      clearIntervalEvent: null,
+      timeRemaining: this.testTime,
+      loading: false,
     };
   },
   computed: {
-    ...mapGetters('typingTest', ['numberOfWords', 'testType']),
+    ...mapGetters('typingTest', ['numberOfWords', 'testType', 'testTime']),
   },
   watch: {
     numberOfWords() {
-      this.restartTest();
+      if(!this.loading)
+        this.restartTest();
+    },
+    testType() {
+      if(!this.loading)
+        this.restartTest();
+    },
+    testTime() {
+      if(!this.loading)
+        this.restartTest();
     },
   },
   mounted() {
@@ -81,17 +95,36 @@ export default {
       document.addEventListener("keydown", this.keyPressed);
       this.wordContainerDiv().addEventListener("focus", this.focusWordContainer)
       this.wordContainerDiv().addEventListener("blur", this.blurWordContainer)
+
+      if(this.testType === 'Time') {
+        this.timeCounterInterval = setInterval(() => {
+          let timeLeft = this.timeRemaining
+          this.timeRemaining = --timeLeft
+        }, 1000);
+
+        this.clearIntervalEvent = setTimeout(() => {
+          this.endTest();
+          clearInterval(this.timeCounterInterval);
+          this.timeCounterInterval = null;
+        }, (parseInt(this.testTime) * 1000) + 200)
+        
+      }
     },
     restartTest() {
+      this.loading = true;
       this.showResult = false;
       this.testEnd = null;
       this.testStart = null;
       this.activeWord = 0;
       this.currentLine = 1;
       this.currentLineWidth = 0;
+      this.timeRemaining = this.testTime;
       this.$refs['word-container'].scrollToTop();
       this.removeActiveWords();
+      clearInterval(this.timeCounterInterval);
+      clearTimeout(this.clearIntervalEvent)
       this.startTest();
+      this.loading = false;
     },
     removeActiveWords() {
       for(let i=0;i<this.words.length;i++) {
@@ -198,16 +231,14 @@ export default {
       document.removeEventListener("keydown", this.keyPressed);
       this.wordContainerDiv().removeEventListener("focus", this.focusWordContainer)
       this.wordContainerDiv().removeEventListener("blur", this.blurWordContainer)
+      clearTimeout(this.clearIntervalEvent)
+      this.clearIntervalEvent = null;
+      clearInterval(this.timeCounterInterval);
+      this.timeCounterInterval = null;
     },
     wordContainerDiv() {
       return this.$refs["word-container"].$el;
     },
-    blurWordContainer() {
-      console.log("suppppppppppppppppp");
-    },
-    focusWordContainer() {
-      console.log("dupppppppppppppppppp");
-    }
   },
 };
 </script>

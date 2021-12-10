@@ -1,6 +1,6 @@
 body {
-    background-color: #303841;
-    color: rgba(255,255,255,0.6);
+    background-color: var(--background-color);
+    color: var(--color-primary);
     font-family: 'Roboto';
 }
 
@@ -11,18 +11,26 @@ body {
 }
 
 .el-dialog {
-    background-color: #4A403A !important;
+    background-color: var(--dialog-background-color) !important;
     width: 70vw;
 
     .el-dialog__header {
         .el-dialog__title{
             font-size: 30px;
-            color: #fff;
+            color: var(--dialog-color);
         }
     }
 
     .el-dialog__body {
-        color: #fff;
+        color: var(--dialog-color);
         padding: 20px;
+    }
+}
+
+.el-switch__label {
+    color: var(--color-primary) !important;
+
+    &.is-active {
+        color: var(--color-secondary) !important;
     }
 }
