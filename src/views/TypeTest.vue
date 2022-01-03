@@ -1,6 +1,6 @@
 <template>
   <div class="type-test-container">
-    <div :style="'margin: 5%'">
+    <div :style="'margin: 25px 5%; height: 300px'">
       <TestStats 
         v-show="testStart !== null"
         :current-word="activeWord" 
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+// todo - change the height of the container from 360px to responsive unit
 import { getWords } from "@/util/wordUtil";
 import WordContainer from '../components/typingTest/WordContainer.vue';
 import RestartButton from '@/components/buttons/RestartButton'
@@ -249,7 +250,6 @@ export default {
 .type-test-container {
   width: 100%;
   text-align: center;
-  display: grid;
 }
 
 </style>

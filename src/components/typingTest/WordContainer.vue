@@ -89,10 +89,10 @@ export default {
 .type-test-container {
   .words-container {
     font-family: "Roboto", sans-serif;
-    font-size: 1.8vw;
+    font-size: 1.8rem;
     color: var(--typing-test-color);
     letter-spacing: 1.5pt;
-    height: 30vh;
+    height: 100%;
     overflow: scroll;
 
     &::-webkit-scrollbar {

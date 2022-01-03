@@ -48,8 +48,7 @@ export default {
 
 <style lang="scss">
 .header {
-  position: sticky;
-  height: 100px;
+  height: 7rem;
   align-items: center;
   padding: 10px 10px;
   display: flex;

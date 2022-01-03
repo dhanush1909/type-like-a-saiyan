@@ -10,7 +10,7 @@
     padding: 15px 20px;
     border-radius: 10px;
     background-color: var(--restart-button-background-color);
-    margin-top: 60px;
+    margin: 2rem 0;
     cursor: pointer;
     color: #fff;
 }
