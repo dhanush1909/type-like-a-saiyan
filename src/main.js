@@ -5,7 +5,10 @@ import store from "./store";
 import "./plugins/element.js";
 import config from "./config";
 
-config(Vue);
+config(Vue, {
+  router,
+  store,
+});
 
 Vue.config.productionTip = false;
 

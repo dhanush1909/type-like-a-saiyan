@@ -16,6 +16,12 @@ const routes = [
     name: "Typing test",
     component: Type,
   },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: Type,
+    
+  }
   // {
   //   path: "/about",
   //   name: "About",

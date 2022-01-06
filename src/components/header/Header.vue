@@ -8,6 +8,7 @@
       <router-link to="/typing-test">
         <font-awesome-icon icon="keyboard" class="nav-icon" />
       </router-link>
+      <span @click="doLogin">login</span>
       <el-switch
         style="margin: 0 30px"
         v-model="theme"
@@ -17,12 +18,12 @@
       >
       </el-switch>
     </div>
-    <TypingTestSettings class="settings"/>
+    <TypingTestSettings class="settings" />
   </div>
 </template>
 
 <script>
-import TypingTestSettings from '@/components/header/typingTestSettings/TypingTestSettings'
+import TypingTestSettings from "@/components/header/typingTestSettings/TypingTestSettings";
 
 export default {
   name: "Header",
@@ -31,18 +32,21 @@ export default {
   },
   data() {
     return {
-      theme: this.$theme.currentTheme === 'light',
-    }
+      theme: this.$theme.currentTheme === "light",
+    };
   },
   methods: {
     switchTheme(value) {
-      if(value === true) {
-        this.$theme.setTheme('light');
+      if (value === true) {
+        this.$theme.setTheme("light");
       } else {
-        this.$theme.setTheme('gotham');
+        this.$theme.setTheme("gotham");
       }
-    }
-  }
+    },
+    doLogin() {
+      this.$auth.loginWithRedirect();
+    },
+  },
 };
 </script>
 
@@ -54,7 +58,7 @@ export default {
   display: flex;
   justify-content: space-between;
   color: var(--color-primary);
-  
+
   .left {
     align-items: center;
     display: flex;
@@ -74,7 +78,8 @@ export default {
     }
   }
 
-  .nav-icon:hover, .router-link-exact-active {
+  .nav-icon:hover,
+  .router-link-exact-active {
     color: var(--color-secondary) !important;
   }
 }
