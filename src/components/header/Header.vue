@@ -8,7 +8,8 @@
       <router-link to="/typing-test">
         <font-awesome-icon icon="keyboard" class="nav-icon" />
       </router-link>
-      <span @click="doLogin">login</span>
+      <span @click="doLogin" v-if="!$auth.isAuthenticated">login</span>
+      <span @click="doLogout" v-else>{{ $auth.user.nickname }}</span>
       <el-switch
         style="margin: 0 30px"
         v-model="theme"
@@ -45,6 +46,9 @@ export default {
     },
     doLogin() {
       this.$auth.loginWithRedirect();
+    },
+    doLogout() {
+      this.$auth.logout();
     },
   },
 };

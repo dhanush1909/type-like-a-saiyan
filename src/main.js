@@ -4,11 +4,14 @@ import router from "./router";
 import store from "./store";
 import "./plugins/element.js";
 import config from "./config";
+import loadingDirective from './directives/loadingDirective';
 
 config(Vue, {
   router,
   store,
 });
+
+loadingDirective.init(Vue);
 
 Vue.config.productionTip = false;
 

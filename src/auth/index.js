@@ -93,7 +93,10 @@ export const useAuth0 = ({
       this.auth0Client = await createAuth0Client({
         ...options,
         client_id: options.clientId,
-        redirect_uri: redirectUri
+        redirect_uri: redirectUri,
+        responseType: 'token id_token',
+        audience: 'https://tla-saiyan/api',
+        redirectUri: 'http://localhost:3000',
       });
 
       try {
@@ -116,7 +119,9 @@ export const useAuth0 = ({
       } finally {
         // Initialize our internal authentication state
         this.isAuthenticated = await this.auth0Client.isAuthenticated();
-        this.user = await this.auth0Client.getUser();
+        if (this.isAuthenticated) {
+          this.user = await this.auth0Client.getUser();
+        }
         this.loading = false;
       }
     }

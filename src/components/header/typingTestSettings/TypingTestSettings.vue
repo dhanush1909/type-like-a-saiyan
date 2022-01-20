@@ -90,7 +90,8 @@ export default {
 
 <style lang="scss" scoped>
 .typing-test-setting {
-    width: 10%;
+    width: 15%;
+    min-width: 145px;
 
     .title {
         font-size: 14px;

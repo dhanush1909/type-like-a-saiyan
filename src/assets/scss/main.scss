@@ -4,18 +4,34 @@ html {
 
 body {
     background-color: var(--background-color);
+    position: relative;
     color: var(--color-primary);
     font-family: 'Roboto';
 }
 
-#app {
+.app-container {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr auto;
     width: 80vw;
     height: 95vh;
     margin: 0 auto;
-    min-width: 700px;
+    min-width: 900px;
+}
+
+.loading-spinner {
+    display: grid;
+    place-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100vw);
+    height: calc(100vh);
+    margin: auto;
+    background-color: var(--background-color);
+    color: var(--color-primary);
+    text-align: center;
+    opacity: 90%;
 }
 
 .footer {

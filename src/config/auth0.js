@@ -1,7 +1,7 @@
 import { Auth0Plugin } from "../auth";
 
 const domain = "dev-68h8t4kz.us.auth0.com";
-const clientId = "M4HnhOTuiuZsRKPstNDtu7ixBk3NPCXo";
+const clientId = "Be9YSD3SYhdGlKgSUXANBcPG51HsKEOz";
 
 export default {
   init: (Vue, router) => {
